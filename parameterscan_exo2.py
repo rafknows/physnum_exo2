@@ -36,6 +36,7 @@ E_th = -1690921.29604419
 for i in range(nsimul):
     output_file = f"{paramstr}={param[i]}_2_3_a.out"
     outputs.append(output_file)
+    #Attention partie en dessous il faut peut etre la modifier pour MAC
     cmd = f"{repertoire}\\{executable} {input_filename} {paramstr}={param[i]:.15g} output={output_file}"
     cmd = f"{executable} {input_filename} {paramstr}={param[i]:.15g} output={output_file}"
     print(cmd)
