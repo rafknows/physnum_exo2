@@ -10,5 +10,5 @@ thetadot0 = 0.0 // initial condition in thetadot
 sampling = 1  // number of time steps between two writings on file
 N_excit  = 0  // number of periods of excitation
 Nperiod  = 3  // number of periods of oscillation of the eigenmode
-nsteps   = 20 // number of time steps per period
-output   = Ex2.txt // name of the output file
+nsteps   = 50 // number of time steps per period
+output   = 2_3_a.txt // name of the output file
