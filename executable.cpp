@@ -17,6 +17,8 @@ private:
   double B0, B1;
   double mu;
   double om_0, om_1, nu, Ig;
+  double I;
+
 
   int N_excit, nsteps_per, Nperiod;
   int sampling;
@@ -27,7 +29,7 @@ private:
   {
     if((!force && last>=sampling) || (force && last!=1))
     {
-      double emec = 0.0; // TODO: Evaluer l'energie mecanique
+      double emec = (1/2) * I * pow(Omega, 2) - mu * B0; // TODO: Evaluer l'energie mecanique
       double pnc  = 0.0; // TODO: Evaluer la puissance des forces non conservatives
 
       *outputFile << t << " " << theta << " " << thetadot << " " << emec << " " << pnc << endl;
@@ -45,8 +47,8 @@ private:
   {
     valarray<double> acc = valarray<double>(2);
 
-    acc[0] = 0.0; // angular acceleration depending on x and t only
-    acc[1] = 0.0; // angular acceleration depending on v only
+    acc[0] = - (mu / I) * sin(x) * (B0 + B1 * sin(Omega * t)); // angular acceleration depending on x and t only
+    acc[1] = - (kappa / I) * v; // angular acceleration depending on v only
 
     return acc;
   }
@@ -55,9 +57,18 @@ private:
     void step()
   {
     // TODO: implement the extended Verlet scheme Section 2.7.4
-    valarray<double> a = acceleration(theta, thetadot, t);
-    theta        = 0.0;
-    thetadot     = 0.0;
+    double thetadot_half;
+    valarray<double> a = acceleration(theta, thetadot, t); //using position and velocity at step j
+    //theta        = 0.0; 
+    //thetadot     = 0.0;
+
+    theta = theta + thetadot * dt + (1.0/2.0) * (a[0] + a[1]) * pow(dt, 2); //step j+1
+    thetadot_half = thetadot + (1.0/2.0) * (a[0] + a[1]) * dt; //step j+1/2
+
+    valarray<double> step_a = acceleration(theta, thetadot_half, t +dt); //acc using j+1 position 
+    valarray<double> half_step_a2 = acceleration(theta, thetadot_half, t +dt/2); //acc using j+1/2 velocity 
+    
+    thetadot = thetadot + (1.0/2.0) * (a[0] + step_a[0]) * dt  + half_step_a2[1] * dt;
 
   }
 
@@ -66,7 +77,7 @@ public:
   Exercice2(int argc, char* argv[])
   {
     const double pi=3.1415926535897932384626433832795028841971e0;
-    string inputPath("configuration.in"); // Fichier d'input par defaut
+    string inputPath("config.in"); // Fichier d'input par defaut
     if(argc>1) // Fichier d'input specifie par l'utilisateur ("./Exercice2 config_perso.in")
       inputPath = argv[1];
 
@@ -89,23 +100,26 @@ public:
     Nperiod  = configFile.get<int>("Nperiod");      // number of periods of oscillation of the eigenmode
     nsteps_per= configFile.get<int>("nsteps");      // number of time step per period
 
+    I = (1.0 / 12.0) * m * pow(L, 2);
+
     // Ouverture du fichier de sortie
     outputFile = new ofstream(configFile.get<string>("output").c_str());
     outputFile->precision(15);
 
-    // define auxiliary variables if you need/want
-    
-    // TODO: implement the expression for tFin, dt
 
+    // define auxiliary variables if you need/want
+    double T = (2 * pi) / Omega;
+    // TODO: implement the expression for tFin, dt
+    
     if(N_excit>0){
       // simulate N_excit periods of excitation
-      tFin = 0.0;
-      dt   = 0.0;
+      tFin = N_excit * T;
+      dt   = T / nsteps_per;
     }
     else{
       // simulate Nperiod periods of the eigenmode
-      tFin = 0.0;
-      dt   = 0.0;
+      tFin = Nperiod * T;
+      dt   = T / nsteps_per;
     } 
     cout << "final time is "<<"  "<< tFin << endl; 
 
