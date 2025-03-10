@@ -7,7 +7,7 @@ import os
 
 # Parameters
 # TODO adapt to what you need (folder path executable input filename)
-
+"""
 executable = 'Exercice2_akhmim_sierra.exe'  # Name of the executable (NB: .exe extension is required on Windows)
 repertoire = r"C:/Users/elbam/Desktop/EPFL/BA4/Physique numérique/Exercice2_akhmim_sierra/physnum_exo2" #saad path
 os.chdir(repertoire)
@@ -15,10 +15,10 @@ os.chdir(repertoire)
 print("Fichiers dans le répertoire :", os.listdir(repertoire))
 
 """
-executable = 'executable'  # Name of the executable (NB: .exe extension is required on Windows)
+executable = 'Exercice2_akhmim_sierra'  # Name of the executable (NB: .exe extension is required on Windows)
 repertoire = r"/Users/rafaelsierra/Documents/PHYS-NUM/Exercise_2_oscillationofmagneticfield/exercise2_akhmim_sierra" #rafis path
 os.chdir(repertoire)
-"""
+
 input_filename = 'config.in'  #Change depending on which methode we use
 
 
@@ -37,8 +37,13 @@ for i in range(nsimul):
     output_file = f"{paramstr}={param[i]}_2_3_a.out"
     outputs.append(output_file)
     #Attention partie en dessous il faut peut etre la modifier pour MAC
+    """
     cmd = f"{repertoire}\\{executable} {input_filename} {paramstr}={param[i]:.15g} output={output_file}"
     cmd = f"{executable} {input_filename} {paramstr}={param[i]:.15g} output={output_file}"
+    """
+    #RAFI
+    cmd = f"./{repertoire}/{executable} {input_filename} {paramstr}={param[i]:.15g} output={output_file}"
+    cmd = f"./{executable} {input_filename} {paramstr}={param[i]:.15g} output={output_file}"
     print(cmd)
     subprocess.run(cmd, shell=True)
     print('Done.')
