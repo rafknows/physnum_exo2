@@ -29,8 +29,8 @@ private:
   {
     if((!force && last>=sampling) || (force && last!=1))
     {
-      double emec = (1/2) * I * pow(Omega, 2) - mu * B0; // TODO: Evaluer l'energie mecanique
-      double pnc  = 0.0; // TODO: Evaluer la puissance des forces non conservatives
+      double emec = (1/2) * I * pow(thetadot, 2) - mu * B0; // TODO: Evaluer l'energie mecanique
+      double pnc  = - kappa * pow(thetadot,2) - mu * sin(theta) * (B0 + B1 * Omega * sin(thetadot * t)) * thetadot; // TODO: Evaluer la puissance des forces non conservatives
 
       *outputFile << t << " " << theta << " " << thetadot << " " << emec << " " << pnc << endl;
       last = 1;
