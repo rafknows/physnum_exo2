@@ -43,6 +43,7 @@ fclose(fid);
 
 I = (1/12) * m * L^2;
 T = (2 * pi) / Omega;
+B0 = 0.01; %le code ne lit pas la bonne valeur de B0
 omega_0 = sqrt((mu / I) * B0);
 if N_excit > 0
     tFin = N_excit * T;
@@ -79,3 +80,5 @@ fig2 = figure;
 semilogx(nsteps_per, delta, 'o-', 'LineWidth', lw, 'Color', 'black')
 xlabel('n_{per}', 'FontSize', fs)
 ylabel('\delta [rad/s]', 'FontSize', fs)
+
+disp(omega_0);

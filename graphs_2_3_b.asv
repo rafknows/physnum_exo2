@@ -1,0 +1,5 @@
+clc; clear; close all;
+
+data = load('config_2_3_b.txt');
+
+t = data(:, 1)

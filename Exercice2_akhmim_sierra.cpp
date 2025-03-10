@@ -77,7 +77,7 @@ public:
   Exercice2(int argc, char* argv[])
   {
     const double pi=3.1415926535897932384626433832795028841971e0;
-    string inputPath("config.in"); // Fichier d'input par defaut
+    string inputPath("config_2_3_b.in"); // Fichier d'input par defaut
     if(argc>1) // Fichier d'input specifie par l'utilisateur ("./Exercice2 config_perso.in")
       inputPath = argv[1];
 
